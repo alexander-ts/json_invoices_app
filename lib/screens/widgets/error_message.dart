@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class ErrorMessage extends StatelessWidget {
   final String message;
   final String buttonTitle;
-  final VoidCallback onButtonPressed;
+  final VoidCallback? onButtonPressed;
 
   const ErrorMessage({
     super.key,
     required this.message,
-    required this.buttonTitle,
-    required this.onButtonPressed,
+    this.buttonTitle = '',
+    this.onButtonPressed,
   });
 
   @override
@@ -26,10 +26,12 @@ class ErrorMessage extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
-          FilledButton(
-            onPressed: onButtonPressed,
-            child: Text(buttonTitle),
-          ),
+          if (onButtonPressed != null) ...[
+            FilledButton(
+              onPressed: onButtonPressed,
+              child: Text(buttonTitle),
+            ),
+          ]
         ],
       ),
     );

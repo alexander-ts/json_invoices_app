@@ -5,6 +5,7 @@ import 'package:json_invoices_app/repositories/invoices_repository.dart';
 import 'package:json_invoices_app/screens/invoice_screen.dart';
 import 'package:json_invoices_app/screens/widgets/error_message.dart';
 import 'package:json_invoices_app/screens/widgets/invoice_list_tile.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.invoicesRepository});
@@ -48,12 +49,14 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           if (snapshot.hasError) {
-            var message = 'Произошла неизвестная ошибка!';
-            var buttonTitle = 'Обновить';
-            callback() => setState(() {});
+            String message = 'Произошла неизвестная ошибка!';
+            String buttonTitle = '';
+            VoidCallback? callback;
 
             if (snapshot.error.runtimeType == PathAccessException) {
               message = 'У приложения недостаточно прав на чтение файла';
+              buttonTitle = 'Открыть настройки';
+              callback = () => openAppSettings();
             }
 
             if (snapshot.error.runtimeType == PathNotFoundException) {
@@ -68,6 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return const CircularProgressIndicator();
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => setState(() {}),
+        child: const Icon(Icons.refresh),
       ),
     );
   }
